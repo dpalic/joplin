@@ -1,0 +1,57 @@
+packages/app-clipper/popup/src/TagInput.js
+  s_e52b454517fa08::t_b34702e946f709 87
+  s_e52b454517fa08::t_24cc848c6a0436 1-42,48-85,102,127-152
+  s_e52b454517fa08::t_c0bd989b623a99 43-47
+  s_e52b454517fa08::t_5ff8a6da8df1dc 86,88-101,103-126
+packages/app-clipper/popup/src/index.js
+  s_e52b454517fa08::t_3fac5500abee16 120
+packages/app-clipper/popup/src/App.css
+  s_e52b454517fa08::t_b34702e946f709 143,198
+  s_e52b454517fa08::t_1d99317eaee90f 117
+  s_e52b454517fa08::t_bb99f145999662 219,221,261,264-270,273-278,280-288,290-334,337-341,343-361
+  s_e52b454517fa08::t_fa2a4e90d60bc9 239,242-243,249-252
+  s_e52b454517fa08::t_d408ac2844aaee 335-336,342
+  s_e52b454517fa08::t_a856fd99fd2a6c 142,144,146-152,154-172
+  s_e52b454517fa08::t_36162b844b28b7 145
+  s_e52b454517fa08::t_3e7d3ce8dc6fde 85
+  s_e52b454517fa08::t_5f8c9752082fe4 138-141
+  s_e52b454517fa08::t_42efbf1301aac3 253
+  s_e52b454517fa08::t_f05614f4ada792 74-75,79-80,91,101-102,107,115-116,122-123,238,240-241,248
+  s_e52b454517fa08::t_436219baedbf05 76-78,81,88-89,94,103-106
+  s_e52b454517fa08::t_5cccb4cc929cfa 111-114,118-121
+  s_e52b454517fa08::t_e85a0061252caf 95
+  s_e52b454517fa08::t_39e29e0452da52 20
+  s_e52b454517fa08::t_98ad5a673495ad 226,229-231,234-237,244-247,254-260,262-263
+  s_e52b454517fa08::t_cc366dc2b2ad29 271-272,279,289
+  s_e52b454517fa08::t_bfce6e7d019bee 224-225,227-228,232-233
+  s_e52b454517fa08::t_a92f24eb5faab4 82-84
+  s_e52b454517fa08::t_6f26a1a838370d 205-209
+packages/app-clipper/popup/src/App.js
+  s_e52b454517fa08::t_3e4ebd4d51024c 6
+  s_e52b454517fa08::t_ff18c2f3d5c64e 185
+  s_e52b454517fa08::t_e807ba367aac85 466-474
+  s_e52b454517fa08::t_97db47e2d181df 61,63-72
+  s_e52b454517fa08::t_386d63e0514a59 480-484,489-503
+  s_e52b454517fa08::t_6e8d7299cfb414 183-184,186,188-192,194-198,200-206,208-216
+  s_e52b454517fa08::t_50ad6a87f2e1e0 231-239,242
+  s_e52b454517fa08::t_a4df8502a5fb06 105-106
+  s_e52b454517fa08::t_22f4371620909b 31-42,46
+  s_e52b454517fa08::t_58f1bdeaf7c678 89
+  s_e52b454517fa08::t_b34702e946f709 62,433
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fab6addf735d4539cac04cf18cb6854909bec8f4",
+  "prompts": {},
+  "sessions": {
+    "s_e52b454517fa08": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8c585df4-9512-4827-a319-c032fdccf5b4",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Darko Palic <darko.palic@xenovation.com>"
+    }
+  }
+}
