@@ -1,0 +1,59 @@
+packages/tools/release-clipper.ts
+  s_e52b454517fa08::t_29485f623726db 18
+packages/app-clipper/options/options.html
+  s_e52b454517fa08::t_5ffa94b2b657e8 14,27,40
+  s_e52b454517fa08::t_cf09a33cf54959 15-26,28-39
+  s_e52b454517fa08::t_29485f623726db 1-13,41-46
+packages/app-clipper/content_scripts/youtubeTranscript.js
+  s_e52b454517fa08::t_814327853ea10f 74-75,77-83
+  s_e52b454517fa08::t_e53d88b1460715 135-139,141-144
+  s_e52b454517fa08::t_81a39903f1593f 276
+  s_e52b454517fa08::t_73a9bbc047d954 3-4,65-66,158-159,169-170
+  s_e52b454517fa08::t_59674886bf716e 1-2,126
+  s_e52b454517fa08::t_5d8dd690c30ba7 5-8,10-13,15-17,19,21-64,67-73,76,84-96,98-107,109-113,116,118-121,123-124,128-134,140,145-157,160-168,171-182,186,188,201,205-213,217,220,228-244,258-275,278-288
+  s_e52b454517fa08::t_c49b5cf22cce18 277
+  s_e52b454517fa08::t_fc738aa45aa964 9
+  s_e52b454517fa08::t_34fe458a977828 245-257
+  s_e52b454517fa08::t_ca059dea74fa5d 18,183-185,187,189-200,202-204,214-216,218-219,221-227
+  s_e52b454517fa08::t_27b922155489bc 20
+  s_e52b454517fa08::t_97bbb456eb0220 14
+  s_e52b454517fa08::t_2d7a99864b6dcd 97,108,114-115,117,122,125,127
+packages/app-clipper/content_scripts/index.js
+  s_e52b454517fa08::t_9a44ba3479e6a1 496-497,508-509
+  s_e52b454517fa08::t_0802abfe9ee060 498-507
+packages/app-clipper/popup/src/App.js
+  s_e52b454517fa08::t_94cbb7bbf96341 200
+  s_e52b454517fa08::t_2a9472ce8e5e71 145-149
+  s_e52b454517fa08::t_6bdd9da6526958 374
+packages/app-clipper/options/options.css
+  s_e52b454517fa08::t_2585b245e92fa2 51-63,71
+  s_e52b454517fa08::t_29485f623726db 1-7,9-26,29,38-42,47-50
+  s_e52b454517fa08::t_1cf119677697c7 8
+  s_e52b454517fa08::t_b67321068b6f31 27-28,30-37,43-46,64-70
+packages/app-clipper/popup/src/App.css
+  s_e52b454517fa08::t_a0ef0e66f0c5c2 177-181
+packages/app-clipper/options/options.js
+  s_e52b454517fa08::t_e6816033a725f8 8-10,14-15,22-45,50-62,66-67
+  s_e52b454517fa08::t_29485f623726db 1-2,5,11-13,16-21,46-49,63-65,68-70
+  s_e52b454517fa08::t_4501e2fa4cf0b0 3-4
+  s_e52b454517fa08::t_c2e94c9654cb63 6
+  s_e52b454517fa08::t_4af8c22f8bf554 7
+packages/app-clipper/manifest.json
+  s_e52b454517fa08::t_29485f623726db 31-34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5e17c0b068c9c2a08071a146d10108efef523256",
+  "prompts": {},
+  "sessions": {
+    "s_e52b454517fa08": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8c585df4-9512-4827-a319-c032fdccf5b4",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Darko Palic <darko.palic@xenovation.com>"
+    }
+  }
+}
