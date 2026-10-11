@@ -1,0 +1,21 @@
+packages/app-clipper/popup/src/App.css
+  s_e52b454517fa08::t_44ac4399d4b6d9 45-57
+packages/app-clipper/popup/src/App.js
+  s_e52b454517fa08::t_ed3d7c8bc775d9 462-485
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "34e6eab14e99d3d01a9639ba1968b53e87fbd833",
+  "prompts": {},
+  "sessions": {
+    "s_e52b454517fa08": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8c585df4-9512-4827-a319-c032fdccf5b4",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Darko Palic <darko.palic@xenovation.com>"
+    }
+  }
+}
