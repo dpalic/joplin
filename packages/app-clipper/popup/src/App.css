@@ -228,7 +228,13 @@ body {
 	align-items: flex-start;
 }
 
+.App .TagInputButtons {
+	display: flex;
+	gap: 6px;
+}
+
 .App .TagInputClear {
+	flex: none;
 	width: 32px;
 	height: 32px;
 	display: flex;
@@ -353,6 +359,147 @@ body {
 .App .TagInputOptions li.Active {
 	background-color: #0269c2;
 	color: #eee;
+}
+
+.App .Favourites {
+	--label-width: 5em;
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	padding: 5px 0;
+}
+
+.App .Favourites label {
+	flex: 0 0 var(--label-width);
+	white-space: nowrap;
+}
+
+.App .FavouritesCombo {
+	flex: 1;
+	min-width: 0;
+}
+
+.App .FavouritesCombo > input {
+	width: 100%;
+	min-height: 32px;
+	padding: 3px 6px;
+	box-sizing: border-box;
+	background-color: #fff;
+	border: 1px solid #767676;
+	border-radius: 3px;
+	color: #111;
+	font-family: inherit;
+	font-size: .8em;
+}
+
+.App .FavouritesCombo > input:focus {
+	outline: none;
+	border-color: #1E89E6;
+	box-shadow: 0 0 0 2px #1E89E6;
+}
+
+.App .FavouritesOptions {
+	max-height: 150px;
+	margin: 4px 0 0 0;
+	padding: 0;
+	overflow-y: auto;
+	list-style: none;
+	background-color: #fff;
+	border: 1px solid #767676;
+	border-radius: 3px;
+}
+
+.App .FavouritesOptions li {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 2px 6px 2px 10px;
+	min-height: 28px;
+	box-sizing: border-box;
+	color: #111;
+	font-size: .8em;
+	line-height: 1.3;
+	cursor: pointer;
+}
+
+.App .FavouritesOptions li.Empty {
+	cursor: default;
+	font-style: italic;
+}
+
+.App .FavouritesOptions li.Active {
+	background-color: #0269c2;
+	color: #eee;
+}
+
+.App .FavouriteText {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.App .FavouriteName,
+.App .FavouriteTags {
+	overflow-wrap: anywhere;
+}
+
+.App .FavouriteName.Unnamed {
+	font-style: italic;
+}
+
+.App .FavouriteTags {
+	font-size: .85em;
+	opacity: .75;
+}
+
+.App .FavouriteActions {
+	flex: none;
+	display: flex;
+}
+
+.App .FavouriteActions button {
+	padding: 2px 6px;
+	background: none;
+	border: none;
+	border-radius: 3px;
+	color: inherit;
+	font-size: 1.2em;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.App .FavouriteActions button:hover {
+	background-color: rgba(255, 255, 255, .25);
+}
+
+.App .FavouriteEdit {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 3px;
+}
+
+.App .FavouriteNotebook {
+	width: 100%;
+	min-width: 0;
+	padding: 2px 4px;
+	box-sizing: border-box;
+	color: #111;
+	font-family: inherit;
+	font-size: 1em;
+}
+
+.App .FavouriteNameInput {
+	min-width: 0;
+	padding: 2px 4px;
+	border: 1px solid #1E89E6;
+	border-radius: 3px;
+	color: #111;
+	font-family: inherit;
+	font-size: 1em;
 }
 
 .App .Controls a.Button:focus-visible,

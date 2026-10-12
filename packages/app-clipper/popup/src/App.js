@@ -3,7 +3,8 @@ import './App.css';
 import led_red from './led_red.png';
 import led_green from './led_green.png';
 import led_orange from './led_orange.png';
-import TagInput from './TagInput';
+import TagInput, { compareTags, isSameTag } from './TagInput';
+import FavouriteSets from './FavouriteSets';
 
 const { connect } = require('react-redux');
 const { bridge } = require('./bridge');
@@ -86,6 +87,8 @@ class AppComponent extends Component {
 		this.state = ({
 			contentScriptLoaded: false,
 			selectedTags: [],
+			favouriteSets: [],
+			newFavouriteId: null,
 			focusableActionIndex: 0,
 			contentScriptError: '',
 			newNoteId: null,
@@ -185,6 +188,44 @@ class AppComponent extends Component {
 			bridge().storageSet({ selectedTags });
 		};
 
+		this.favouriteSets_change = (favouriteSets, extraState = {}) => {
+			this.setState({ favouriteSets, ...extraState });
+			bridge().storageSet({ favouriteSets });
+		};
+
+		this.favouriteSets_save = () => {
+			const tags = this.state.selectedTags;
+			if (!tags.length || this.isFavouriteSelection()) return;
+
+			const id = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+			this.favouriteSets_change([...this.state.favouriteSets, { id, name: '', tags, folderId: this.props.selectedFolderId || null }], { newFavouriteId: id });
+		};
+
+		this.favouriteSets_setFolder = (id, folderId) => {
+			this.favouriteSets_change(this.state.favouriteSets.map(item => (item.id === id ? { ...item, folderId } : item)));
+		};
+
+		this.favouriteSets_rename = (id, name) => {
+			this.favouriteSets_change(this.state.favouriteSets.map(item => (item.id === id ? { ...item, name } : item)));
+		};
+
+		this.favouriteSets_delete = (id) => {
+			this.favouriteSets_change(this.state.favouriteSets.filter(item => item.id !== id));
+		};
+
+		this.favouriteSets_apply = (favouriteSet) => {
+			const merged = [...this.state.selectedTags];
+			for (const tag of favouriteSet.tags) {
+				if (!merged.some(existing => isSameTag(existing, tag))) merged.push(tag);
+			}
+			this.selectedTags_change(merged.sort(compareTags));
+
+			// A notebook that no longer exists is ignored and the current one stays.
+			if (favouriteSet.folderId && this.findFolder(favouriteSet.folderId)) {
+				this.props.dispatch({ type: 'SELECTED_FOLDER_SET', id: favouriteSet.folderId });
+			}
+		};
+
 		// Only one action button is in the tab order, the arrow keys move between them.
 		this.actions_keyDown = (event) => {
 			const buttons = Array.from(event.currentTarget.querySelectorAll('a.Button'));
@@ -237,9 +278,57 @@ class AppComponent extends Component {
 		this.setState(state => (state.selectedTags.length ? null : { selectedTags }));
 	}
 
+	findFolder(id, folders = this.props.folders) {
+		for (const folder of folders) {
+			if (folder.id === id) return folder;
+			const found = folder.children && this.findFolder(id, folder.children);
+			if (found) return found;
+		}
+		return null;
+	}
+
+	flatFolders(folders = this.props.folders, depth = 0) {
+		return folders.flatMap(folder => [
+			{ id: folder.id, title: folder.title, depth },
+			...(folder.children ? this.flatFolders(folder.children, depth + 1) : []),
+		]);
+	}
+
+	isFavouriteSelection() {
+		const { selectedTags, favouriteSets } = this.state;
+		const folderId = this.props.selectedFolderId || null;
+		return favouriteSets.some(item => item.folderId === folderId && item.tags.length === selectedTags.length && item.tags.every(tag => selectedTags.some(selected => isSameTag(selected, tag))));
+	}
+
+	async restoreFavouriteSets() {
+		const stored = await bridge().storageGet(['favouriteSets', 'favouriteTags']);
+		if (!stored) return;
+
+		if (Array.isArray(stored.favouriteSets)) {
+			const favouriteSets = stored.favouriteSets
+				.filter(item => item && typeof item.id === 'string' && Array.isArray(item.tags))
+				.map(item => ({
+					id: item.id,
+					name: typeof item.name === 'string' ? item.name : '',
+					tags: item.tags.filter(tag => typeof tag === 'string'),
+					folderId: typeof item.folderId === 'string' ? item.folderId : null,
+				}))
+				.filter(item => item.tags.length);
+			this.setState({ favouriteSets });
+			return;
+		}
+
+		// Before named sets existed, one unnamed set of tags was stored.
+		if (Array.isArray(stored.favouriteTags)) {
+			const tags = stored.favouriteTags.filter(tag => typeof tag === 'string');
+			if (tags.length) this.favouriteSets_change([{ id: 'legacy', name: '', tags, folderId: null }]);
+		}
+	}
+
 	async componentDidMount() {
 		bridge().onReactAppStarts();
 		void this.restoreSelectedTags();
+		void this.restoreFavouriteSets();
 
 		try {
 			await this.loadContentScripts();
@@ -481,6 +570,19 @@ class AppComponent extends Component {
 						allTags={this.props.tags.map(tag => tag.title)}
 						selectedTags={this.state.selectedTags}
 						onChange={this.selectedTags_change}
+						isFavourite={this.isFavouriteSelection()}
+						onSaveFavourites={this.favouriteSets_save}
+					/>
+					<FavouriteSets
+						sets={this.state.favouriteSets}
+						newSetId={this.state.newFavouriteId}
+						onNewSetHandled={() => this.setState({ newFavouriteId: null })}
+						onApply={this.favouriteSets_apply}
+						folderTitle={id => this.findFolder(id)?.title}
+						onRename={this.favouriteSets_rename}
+						folderOptions={this.flatFolders()}
+						onChangeFolder={this.favouriteSets_setFolder}
+						onDelete={this.favouriteSets_delete}
 					/>
 				</fieldset>
 				<fieldset className="Group">

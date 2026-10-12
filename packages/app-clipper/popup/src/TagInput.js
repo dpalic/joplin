@@ -1,12 +1,12 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
 
-const compareTags = (a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
-const isSameTag = (a, b) => a.toLowerCase() === b.toLowerCase();
+export const compareTags = (a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+export const isSameTag = (a, b) => a.toLowerCase() === b.toLowerCase();
 
 // Otherwise the click blurs the input, which closes the list and moves the button away before the click lands.
 const keepFocus = event => event.preventDefault();
 
-const TagInput = ({ allTags, selectedTags, onChange }) => {
+const TagInput = ({ allTags, selectedTags, onChange, isFavourite, onSaveFavourites }) => {
 	const id = useId();
 	const inputRef = useRef(null);
 	const [query, setQuery] = useState('');
@@ -25,6 +25,7 @@ const TagInput = ({ allTags, selectedTags, onChange }) => {
 		...(canCreate ? [{ title: trimmedQuery, isNew: true }] : []),
 	];
 	const currentIndex = Math.min(activeIndex, options.length - 1);
+	const favouriteTitle = isFavourite ? 'These tags are already saved as a favourite' : 'Save the current tags as a favourite';
 
 	useEffect(() => {
 		if (!isOpen) return;
@@ -88,20 +89,43 @@ const TagInput = ({ allTags, selectedTags, onChange }) => {
 		<div className="Tags">
 			<div className="TagInputSide">
 				<label htmlFor={`${id}-input`}>Tags</label>
-				<button
-					type="button"
-					className="TagInputClear"
-					tabIndex={-1}
-					disabled={!selectedTags.length}
-					title="Remove all tags"
-					aria-label="Remove all tags"
-					onMouseDown={keepFocus}
-					onClick={removeAllTags}
-				>
-					<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
-						<path fill="currentColor" d="M6 1h4l.5 1H14v1.5H2V2h3.5L6 1zM3.5 5h9l-.7 9.2a1 1 0 0 1-1 .8H5.2a1 1 0 0 1-1-.8L3.5 5zm2.3 1.5v6.5h1.2V6.5H5.8zm3.2 0v6.5h1.2V6.5H9z"/>
-					</svg>
-				</button>
+				<div className="TagInputButtons">
+					<button
+						type="button"
+						className="TagInputClear"
+						tabIndex={-1}
+						disabled={!selectedTags.length}
+						title="Remove all tags"
+						aria-label="Remove all tags"
+						onMouseDown={keepFocus}
+						onClick={removeAllTags}
+					>
+						<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+							<path fill="currentColor" d="M6 1h4l.5 1H14v1.5H2V2h3.5L6 1zM3.5 5h9l-.7 9.2a1 1 0 0 1-1 .8H5.2a1 1 0 0 1-1-.8L3.5 5zm2.3 1.5v6.5h1.2V6.5H5.8zm3.2 0v6.5h1.2V6.5H9z"/>
+						</svg>
+					</button>
+					<button
+						type="button"
+						className="TagInputClear"
+						tabIndex={-1}
+						disabled={!selectedTags.length || isFavourite}
+						title={favouriteTitle}
+						aria-label={favouriteTitle}
+						aria-pressed={isFavourite}
+						onMouseDown={keepFocus}
+						onClick={onSaveFavourites}
+					>
+						<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+							<path
+								fill={isFavourite ? 'currentColor' : 'none'}
+								stroke="currentColor"
+								strokeWidth="1.2"
+								strokeLinejoin="round"
+								d="M8 1.6l1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6L8 1.6z"
+							/>
+						</svg>
+					</button>
+				</div>
 			</div>
 			<div className="TagInput">
 				<div className="TagInputField" onClick={() => inputRef.current?.focus()}>
