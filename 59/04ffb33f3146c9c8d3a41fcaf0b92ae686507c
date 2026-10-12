@@ -1,0 +1,21 @@
+packages/app-clipper/popup/src/TagInput.js
+  s_e52b454517fa08::t_0451b9c350ea88 6
+  s_e52b454517fa08::t_0f6980922d4ec6 7-8
+  s_e52b454517fa08::t_c61a97f8056c1d 98,111
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5904ffb33f3146c9c8d3a41fcaf0b92ae686507c",
+  "prompts": {},
+  "sessions": {
+    "s_e52b454517fa08": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8c585df4-9512-4827-a319-c032fdccf5b4",
+        "model": "unknown"
+      },
+      "human_author": "Darko Palic <darko.palic@xenovation.com>"
+    }
+  }
+}
