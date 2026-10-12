@@ -1,0 +1,58 @@
+packages/app-clipper/popup/src/App.css
+  s_e52b454517fa08::t_dbbeb528d22543 364-475,477,496-502
+  s_e52b454517fa08::t_3119c53259929e 486-492
+  s_e52b454517fa08::t_49bedfa159cd9b 231-235,237
+  s_e52b454517fa08::t_04693b0a11134b 476,478-485,493-495,503
+  s_e52b454517fa08::t_03a97d4f5c5e3d 504
+packages/app-clipper/popup/src/TagInput.js
+  s_e52b454517fa08::t_d5c568078f9c29 28
+  s_e52b454517fa08::t_d3e1784e219999 92-99,101-114,116-128
+  s_e52b454517fa08::t_c6ea9529d82f23 100
+  s_e52b454517fa08::t_1c4891b0a35269 115
+  s_e52b454517fa08::t_60f45e8290ebab 3-4,9
+packages/app-clipper/popup/src/App.js
+  s_e52b454517fa08::t_088bb1692bb448 6-7
+  s_e52b454517fa08::t_663e977d8c357a 227-228
+  s_e52b454517fa08::t_a6cc82cf5ae769 297-298,301-309,316-323,325
+  s_e52b454517fa08::t_80aa3f6068f059 310-315
+  s_e52b454517fa08::t_a1f9bdd40d73af 581
+  s_e52b454517fa08::t_afcc518047d2e5 216,218,222-226
+  s_e52b454517fa08::t_388dea83b24399 201-203
+  s_e52b454517fa08::t_4bd431210f472d 583-584
+  s_e52b454517fa08::t_bad83521babe4e 90-91
+  s_e52b454517fa08::t_3147ca469ad0a6 191-200,206-215,217,219-221
+  s_e52b454517fa08::t_5da30ab8477944 573-580,582,585
+  s_e52b454517fa08::t_0c9829a1dc5eea 331
+  s_e52b454517fa08::t_88d9ae504cae41 326-327
+  s_e52b454517fa08::t_b2b3f18c23291d 290-296
+  s_e52b454517fa08::t_9ed4b34be23d6a 324
+  s_e52b454517fa08::t_8702e8786d6b0b 204-205
+  s_e52b454517fa08::t_5ac5f1b29ac8f1 281-289,299-300
+packages/app-clipper/popup/src/FavouriteSets.js
+  s_e52b454517fa08::t_f88004cca4cc12 1-6,8-16,19-20,22-60,62-116,123-127,129-133,135-169,172-183,211-213,215-237
+  s_e52b454517fa08::t_b0a88869ec79ab 170-171
+  s_e52b454517fa08::t_b9ea90161c979b 134
+  s_e52b454517fa08::t_d8dbb3d40cdb7b 194,196-209
+  s_e52b454517fa08::t_6a8b8ac9ca492c 17-18,21
+  s_e52b454517fa08::t_96146bcf152f7e 184-193,195,210,214
+  s_e52b454517fa08::t_68bf06e0d80343 7
+  s_e52b454517fa08::t_a25e219dd0b54e 128
+  s_e52b454517fa08::t_77ef4155e4ba55 61
+  s_e52b454517fa08::t_0f9e74c1ed9fef 117-122
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "312522753cf398ba416490734e17831a1ab98dbb",
+  "prompts": {},
+  "sessions": {
+    "s_e52b454517fa08": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8c585df4-9512-4827-a319-c032fdccf5b4",
+        "model": "unknown"
+      },
+      "human_author": "Darko Palic <darko.palic@xenovation.com>"
+    }
+  }
+}
