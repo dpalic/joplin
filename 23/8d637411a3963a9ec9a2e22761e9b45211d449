@@ -1,0 +1,21 @@
+packages/app-clipper/build.sh
+  s_e52b454517fa08::t_c920799fd251bb 7,10,14-26,28-64,66,90-101
+  s_e52b454517fa08::t_53920fa5dfd280 1-6,8-9,11-13,68-89,102-103
+  s_e52b454517fa08::t_aa8bf0206e3f71 27,65,67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "238d637411a3963a9ec9a2e22761e9b45211d449",
+  "prompts": {},
+  "sessions": {
+    "s_e52b454517fa08": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8c585df4-9512-4827-a319-c032fdccf5b4",
+        "model": "unknown"
+      },
+      "human_author": "Darko Palic <darko.palic@xenovation.com>"
+    }
+  }
+}
