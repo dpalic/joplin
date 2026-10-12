@@ -3,6 +3,9 @@ import React, { useEffect, useId, useRef, useState } from 'react';
 const compareTags = (a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
 const isSameTag = (a, b) => a.toLowerCase() === b.toLowerCase();
 
+// Otherwise the click blurs the input, which closes the list and moves the button away before the click lands.
+const keepFocus = event => event.preventDefault();
+
 const TagInput = ({ allTags, selectedTags, onChange }) => {
 	const id = useId();
 	const inputRef = useRef(null);
@@ -92,6 +95,7 @@ const TagInput = ({ allTags, selectedTags, onChange }) => {
 					disabled={!selectedTags.length}
 					title="Remove all tags"
 					aria-label="Remove all tags"
+					onMouseDown={keepFocus}
 					onClick={removeAllTags}
 				>
 					<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
@@ -104,7 +108,7 @@ const TagInput = ({ allTags, selectedTags, onChange }) => {
 					{selectedTags.map(tag => (
 						<span key={tag} className="TagChip">
 							<span className="TagChipTitle">{tag}</span>
-							<button type="button" tabIndex={-1} aria-label={`Remove tag ${tag}`} onClick={() => removeTag(tag)}>×</button>
+							<button type="button" tabIndex={-1} aria-label={`Remove tag ${tag}`} onMouseDown={keepFocus} onClick={() => removeTag(tag)}>×</button>
 						</span>
 					))}
 					<input
