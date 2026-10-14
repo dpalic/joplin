@@ -5,6 +5,11 @@ body {
 	line-height: 2em;
 }
 
+.PopupFrame {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
 .App {
 	width: 400px;
 	

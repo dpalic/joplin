@@ -3,6 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import PopupFrame from './PopupFrame';
 
 const { Provider } = require('react-redux');
 const { bridge } = require('./bridge');
@@ -117,11 +118,11 @@ async function main() {
 	console.info('Popup: Creating React app...');
 
 	ReactDOM.render(
-		<div style = {{ maxHeight: screen.height * 0.65, overflowY: 'auto' }}>
+		<PopupFrame>
 			<Provider store={store}>
 				<App />
 			</Provider>
-		</div>,
+		</PopupFrame>,
 		document.getElementById('root'));
 }
 
