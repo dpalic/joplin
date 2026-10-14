@@ -501,6 +501,7 @@
 				response.html = youtube.html;
 				if (youtube.title) response.title = youtube.title;
 				response.image_sizes = { ...response.image_sizes, ...youtube.imageSizes };
+					response.anchor_names = [...(response.anchor_names || []), ...youtube.anchorNames];
 				if (youtube.warning) response.warning = [response.warning, youtube.warning].filter(Boolean).join(' ');
 			} catch (error) {
 				console.warn('jopext: Could not process the YouTube page', error);

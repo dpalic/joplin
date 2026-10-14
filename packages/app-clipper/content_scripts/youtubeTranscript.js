@@ -17,6 +17,10 @@
 	const youtubePanelSelector = 'ytd-engagement-panel-section-list-renderer';
 	const youtubeExpandedPanelSelector = `${youtubePanelSelector}[visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"]`;
 	const youtubeTranscriptLoadTimeoutMs = 6000;
+	const youtubeDescriptionAnchor = 'description';
+	const youtubeTranscriptAnchor = 'transcript';
+	const youtubeVideoContentAnchor = 'video-content';
+	const youtubeContentAnchor = 'content';
 	const youtubeTimestampPattern = /^\d+(:\d{2}){1,2}$/;
 
 	function youtubeEscapeHtml(s) {
@@ -81,7 +85,55 @@
 			const href = youtubeWatchUrl(videoId, youtubeTimestampToSeconds(segment.timestamp));
 			return `<p><a href="${youtubeEscapeHtml(href)}">${youtubeEscapeHtml(segment.timestamp)}</a> ${youtubeEscapeHtml(segment.text)}</p>`;
 		});
-		return `<h2>Transcript</h2>${lines.join('')}`;
+		return `<a id="${youtubeTranscriptAnchor}"></a><h2>Transcript</h2>${lines.join('')}`;
+	}
+
+	// YouTube itself only treats description lines starting with a timestamp as chapters if the
+	// first one is at 0:00 and there are at least three, so other timestamp mentions are ignored.
+	function youtubeValidChapters(chapters) {
+		const isValid = chapters.length >= 3 && youtubeTimestampToSeconds(chapters[0].timestamp) === 0;
+		return isValid ? chapters : [];
+	}
+
+	function youtubeChaptersFromDescription(descriptionHtml) {
+		const parser = new DOMParser();
+		const chapterLine = /^[\s•*-]*(\d+(?::\d{2}){1,2})[\s\-–—:|.)]*(\S.*)$/;
+		const chapters = descriptionHtml.split('<br>')
+			.map(line => parser.parseFromString(line, 'text/html').body.textContent.trim().match(chapterLine))
+			.filter(Boolean)
+			.map(match => ({ timestamp: match[1], title: match[2].trim() }));
+		return youtubeValidChapters(chapters);
+	}
+
+	// The chapters YouTube lists next to the player. They also cover chapters that YouTube
+	// created itself and that are not written in the description.
+	function youtubeChaptersFromPanel() {
+		const chapters = Array.from(document.querySelectorAll('ytd-macro-markers-list-item-renderer')).map(item => ({
+			timestamp: youtubeCleanText(item.querySelector('#time')),
+			title: youtubeCleanText(item.querySelector('#details h4, h4')),
+		}));
+		return youtubeValidChapters(chapters.filter(chapter => youtubeTimestampPattern.test(chapter.timestamp) && chapter.title));
+	}
+
+	function youtubeChaptersToHtml(chapters, videoId) {
+		if (!chapters.length) return '';
+		const items = chapters.map((chapter) => {
+			const href = youtubeWatchUrl(videoId, youtubeTimestampToSeconds(chapter.timestamp));
+			return `<li><a href="${youtubeEscapeHtml(href)}">${youtubeEscapeHtml(chapter.timestamp)}</a> ${youtubeEscapeHtml(chapter.title)}</li>`;
+		});
+		return `<a id="${youtubeVideoContentAnchor}"></a><h3>Video Content</h3><ul>${items.join('')}</ul>`;
+	}
+
+	function youtubeNoteContentsToHtml(sections) {
+		const hasSeveralEntries = sections.length >= 2 || sections.some(section => (section.children || []).length >= 2);
+		if (!hasSeveralEntries) return '';
+		const link = section => `<a href="#${section.anchor}">${section.title}</a>`;
+		const items = sections.map((section) => {
+			const children = section.children || [];
+			const nested = children.length ? `<ul>${children.map(child => `<li>${link(child)}</li>`).join('')}</ul>` : '';
+			return `<li>${link(section)}${nested}</li>`;
+		});
+		return `<h2>Table of Contents</h2><ul>${items.join('')}</ul>`;
 	}
 
 	function youtubeSleep(ms) {
@@ -146,7 +198,7 @@
 
 	async function youtubeVideoContentHtml(videoId, settings) {
 		const metadata = document.querySelector('ytd-watch-metadata');
-		if (!metadata) return { html: '', title: '', imageSizes: {} };
+		if (!metadata) return { html: '', headHtml: '', descriptionHtml: '', title: '', imageSizes: {} };
 
 		const title = youtubeCleanText(metadata.querySelector('h1'));
 		const channel = metadata.querySelector('#owner ytd-channel-name a');
@@ -164,14 +216,20 @@
 		if (channel) {
 			parts.push(`<p>Channel: <a href="${youtubeEscapeHtml(channel.href)}">${youtubeEscapeHtml(youtubeCleanText(channel))}</a></p>`);
 		}
-		if (description) parts.push(`<h2>Description</h2><p>${description}</p>`);
+		const chapters = youtubeChaptersFromDescription(description);
+		const chaptersHtml = youtubeChaptersToHtml(chapters.length ? chapters : youtubeChaptersFromPanel(), videoId);
+		const headHtml = parts.join('');
+		let descriptionHtml = '';
+		if (description || chaptersHtml) {
+			descriptionHtml = `<a id="${youtubeDescriptionAnchor}"></a><h2>Description</h2>${chaptersHtml}${description ? `<a id="${youtubeContentAnchor}"></a><h3>Content</h3><p>${description}</p>` : ''}`;
+		}
 
 		// Joplin writes these sizes into the <img> tag as they are (replaceUrlsByResources in the
 		// clipper REST route), which allows a percentage width.
 		const imageSizes = {
 			[thumbnailUrl]: [{ width: youtubeThumbnailWidthValue(settings), height: 'auto', naturalWidth: 0, naturalHeight: 0 }],
 		};
-		return { html: parts.join(''), title, imageSizes };
+		return { html: headHtml + descriptionHtml, headHtml, descriptionHtml, title, imageSizes };
 	}
 
 	function youtubeReadSegment(element) {
@@ -228,7 +286,7 @@
 	}
 
 	async function processYoutubeClip(clipHtml) {
-		const unchanged = { html: clipHtml, title: '', warning: '', imageSizes: {} };
+		const unchanged = { html: clipHtml, title: '', warning: '', imageSizes: {}, anchorNames: [] };
 
 		const videoId = youtubeVideoId(window.location.href);
 		if (!videoId) return unchanged;
@@ -240,6 +298,7 @@
 		let html = clipHtml;
 		let title = '';
 		let imageSizes = {};
+		let videoContent = null;
 
 		if (settings.youtubeOnlyVideoContent) {
 			const videoDetailsWarning = 'Could not read the YouTube video details - the full page has been saved instead.';
@@ -247,6 +306,7 @@
 				const content = await youtubeVideoContentHtml(videoId, settings);
 				if (content.html) {
 					html = content.html;
+					videoContent = content;
 					title = content.title;
 					imageSizes = content.imageSizes;
 				} else {
@@ -258,19 +318,36 @@
 			}
 		}
 
+		const sections = [];
+		if (videoContent && videoContent.descriptionHtml) {
+			const children = [];
+			if (videoContent.descriptionHtml.includes(`id="${youtubeVideoContentAnchor}"`)) children.push({ anchor: youtubeVideoContentAnchor, title: 'Video Content' });
+			if (videoContent.descriptionHtml.includes(`id="${youtubeContentAnchor}"`)) children.push({ anchor: youtubeContentAnchor, title: 'Content' });
+			sections.push({ anchor: youtubeDescriptionAnchor, title: 'Description', children });
+		}
+
 		if (settings.youtubeFetchTranscription) {
 			try {
 				const segments = await youtubeReadTranscriptSegments();
 				const transcriptHtml = segments ? youtubeTranscriptToHtml(segments, videoId) : '';
-				if (transcriptHtml) html += transcriptHtml;
-				else warnings.push('No transcript was found for this YouTube video.');
+				if (transcriptHtml) {
+					html += transcriptHtml;
+					sections.push({ anchor: youtubeTranscriptAnchor, title: 'Transcript' });
+				} else {
+					warnings.push('No transcript was found for this YouTube video.');
+				}
 			} catch (error) {
 				console.warn('jopext: Could not read the YouTube transcript', error);
 				warnings.push('Could not read the YouTube transcript.');
 			}
 		}
 
-		return { html, title, warning: warnings.join(' '), imageSizes };
+		const contentsHtml = youtubeNoteContentsToHtml(sections);
+		if (contentsHtml && videoContent) {
+			html = videoContent.headHtml + contentsHtml + html.slice(videoContent.headHtml.length);
+		}
+
+		return { html, title, warning: warnings.join(' '), imageSizes, anchorNames: contentsHtml ? sections.flatMap(section => [section.anchor, ...(section.children || []).map(child => child.anchor)]) : [] };
 	}
 
 	if (typeof window !== 'undefined') window.processYoutubeClip = processYoutubeClip;
@@ -280,6 +357,9 @@
 			youtubeVideoId,
 			youtubeTimestampToSeconds,
 			youtubeTranscriptToHtml,
+			youtubeChaptersFromDescription,
+			youtubeChaptersToHtml,
+			youtubeNoteContentsToHtml,
 			youtubeThumbnailWidthValue,
 			youtubeThumbnailUrl,
 		};
