@@ -8,6 +8,9 @@
 	const youtubeSettingDefaults = {
 		youtubeFetchTranscription: true,
 		youtubeOnlyVideoContent: true,
+		youtubeAddRelatedInformation: false,
+		youtubeAddSummary: false,
+		youtubeSummaryTitle: 'AI generated Summary',
 		youtubeThumbnailWidthMode: 'percentage',
 		youtubeThumbnailWidthPercentage: 40,
 		youtubeThumbnailWidthPixels: 500,
@@ -19,6 +22,10 @@
 	const youtubeTranscriptLoadTimeoutMs = 6000;
 	const youtubeDescriptionAnchor = 'description';
 	const youtubeTranscriptAnchor = 'transcript';
+	const youtubeSummaryAnchor = 'summary';
+	const youtubeSummaryTitles = ['AI generated Summary', 'Summary'];
+	const youtubeRelatedAnchor = 'related-information';
+	const youtubeRelatedTitle = 'Related Information';
 	const youtubeVideoContentAnchor = 'video-content';
 	const youtubeContentAnchor = 'content';
 	const youtubeTimestampPattern = /^\d+(:\d{2}){1,2}$/;
@@ -124,6 +131,14 @@
 		return `<a id="${youtubeVideoContentAnchor}"></a><h3>Video Content</h3><ul>${items.join('')}</ul>`;
 	}
 
+	function youtubeSummaryTitle(settings) {
+		return youtubeSummaryTitles.includes(settings.youtubeSummaryTitle) ? settings.youtubeSummaryTitle : youtubeSummaryTitles[0];
+	}
+
+	function youtubeRelatedInformationHtml() {
+		return `<a id="${youtubeRelatedAnchor}"></a><h2>${youtubeRelatedTitle}</h2>`;
+	}
+
 	function youtubeNoteContentsToHtml(sections) {
 		const hasSeveralEntries = sections.length >= 2 || sections.some(section => (section.children || []).length >= 2);
 		if (!hasSeveralEntries) return '';
@@ -220,8 +235,9 @@
 		const chaptersHtml = youtubeChaptersToHtml(chapters.length ? chapters : youtubeChaptersFromPanel(), videoId);
 		const headHtml = parts.join('');
 		let descriptionHtml = '';
-		if (description || chaptersHtml) {
-			descriptionHtml = `<a id="${youtubeDescriptionAnchor}"></a><h2>Description</h2>${chaptersHtml}${description ? `<a id="${youtubeContentAnchor}"></a><h3>Content</h3><p>${description}</p>` : ''}`;
+		const summaryHtml = settings.youtubeAddSummary ? `<a id="${youtubeSummaryAnchor}"></a><h3>${youtubeSummaryTitle(settings)}</h3>` : '';
+		if (description || chaptersHtml || summaryHtml) {
+			descriptionHtml = `<a id="${youtubeDescriptionAnchor}"></a><h2>Description</h2>${summaryHtml}${chaptersHtml}${description ? `<a id="${youtubeContentAnchor}"></a><h3>Content</h3><p>${description}</p>` : ''}`;
 		}
 
 		// Joplin writes these sizes into the <img> tag as they are (replaceUrlsByResources in the
@@ -321,9 +337,15 @@
 		const sections = [];
 		if (videoContent && videoContent.descriptionHtml) {
 			const children = [];
+			if (settings.youtubeAddSummary) children.push({ anchor: youtubeSummaryAnchor, title: youtubeSummaryTitle(settings) });
 			if (videoContent.descriptionHtml.includes(`id="${youtubeVideoContentAnchor}"`)) children.push({ anchor: youtubeVideoContentAnchor, title: 'Video Content' });
 			if (videoContent.descriptionHtml.includes(`id="${youtubeContentAnchor}"`)) children.push({ anchor: youtubeContentAnchor, title: 'Content' });
 			sections.push({ anchor: youtubeDescriptionAnchor, title: 'Description', children });
+		}
+
+		if (settings.youtubeAddRelatedInformation) {
+			html += youtubeRelatedInformationHtml();
+			sections.push({ anchor: youtubeRelatedAnchor, title: youtubeRelatedTitle });
 		}
 
 		if (settings.youtubeFetchTranscription) {
@@ -342,8 +364,8 @@
 			}
 		}
 
-		const contentsHtml = youtubeNoteContentsToHtml(sections);
-		if (contentsHtml && videoContent) {
+		const contentsHtml = videoContent ? youtubeNoteContentsToHtml(sections) : '';
+		if (contentsHtml) {
 			html = videoContent.headHtml + contentsHtml + html.slice(videoContent.headHtml.length);
 		}
 

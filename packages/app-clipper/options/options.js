@@ -1,10 +1,13 @@
 const browser_ = typeof browser !== 'undefined' ? browser : chrome;
 
 // Duplicated from youtubeSettingDefaults in ../content_scripts/youtubeTranscript.js; keep both in sync.
-// Sharing one file would need another script tag in options.html for just five values.
+// Sharing one file would need another script tag in options.html for just eight values.
 const defaults = {
 	youtubeOnlyVideoContent: true,
 	youtubeFetchTranscription: true,
+	youtubeAddRelatedInformation: false,
+	youtubeAddSummary: false,
+	youtubeSummaryTitle: 'AI generated Summary',
 	youtubeThumbnailWidthMode: 'percentage',
 	youtubeThumbnailWidthPercentage: 40,
 	youtubeThumbnailWidthPixels: 500,

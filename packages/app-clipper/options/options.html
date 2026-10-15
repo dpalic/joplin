@@ -24,6 +24,22 @@
 				</div>
 			</div>
 			<div class="option">
+				<label class="label" for="add-related-information">Add Related Information<span class="hint">Prepare chapter for easier linking of notes. Will be created empty.</span></label>
+				<div class="control">
+					<input id="add-related-information" type="checkbox" data-setting="youtubeAddRelatedInformation">
+				</div>
+			</div>
+			<div class="option">
+				<label class="label" for="add-summary">Add Summary<span class="hint">Prepare chapter for a summary of the video. Will be created empty, before Video Content.</span></label>
+				<div class="control">
+					<input id="add-summary" type="checkbox" data-setting="youtubeAddSummary">
+					<select id="summary-title" aria-label="Summary chapter name" data-setting="youtubeSummaryTitle">
+						<option value="AI generated Summary">AI generated Summary</option>
+						<option value="Summary">Summary</option>
+					</select>
+				</div>
+			</div>
+			<div class="option">
 				<label class="label" for="thumbnail-width-mode">Video thumbnail width</label>
 				<div class="control">
 					<select id="thumbnail-width-mode" data-setting="youtubeThumbnailWidthMode">

@@ -34,6 +34,12 @@ body {
 	padding: 6px 0;
 }
 
+.hint {
+	display: block;
+	color: #666;
+	font-size: .9em;
+}
+
 .control {
 	display: flex;
 	align-items: center;

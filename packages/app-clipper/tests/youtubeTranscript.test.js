@@ -118,6 +118,41 @@ describe('youtubeTranscript', () => {
 			expect(order).toEqual([...order].sort((a, b) => a - b));
 		});
 
+		test('adds an empty Related Information chapter between Description and Transcript', async () => {
+			const result = await clip(watchPage({ description: chapterDescription, transcript: true }), { youtubeAddRelatedInformation: true });
+			expect(result.html).toContain('<a id="description"></a><h2>Description</h2>');
+			expect(result.html).toContain('<a id="related-information"></a><h2>Related Information</h2><a id="transcript"></a><h2>Transcript</h2>');
+			expect(result.html.indexOf('<h2>Description</h2>')).toBeLessThan(result.html.indexOf('<h2>Related Information</h2>'));
+			expect(result.html).toContain('<li><a href="#related-information">Related Information</a></li>');
+			expect(result.anchorNames).toContain('related-information');
+		});
+
+		test.each([
+			[{ youtubeSummaryTitle: 'Summary' }, 'Summary'],
+			[{}, 'AI generated Summary'],
+			[{ youtubeSummaryTitle: '<script>' }, 'AI generated Summary'],
+		])('adds an empty summary chapter before Video Content for %j', async (settings, title) => {
+			const result = await clip(watchPage({ description: chapterDescription }), { youtubeAddSummary: true, youtubeFetchTranscription: false, ...settings });
+			expect(result.html).toContain(`<h2>Description</h2><a id="summary"></a><h3>${title}</h3><a id="video-content"></a><h3>Video Content</h3>`);
+			expect(result.html.indexOf('href="#summary"')).toBeLessThan(result.html.indexOf('href="#video-content"'));
+			expect(result.anchorNames.slice(0, 3)).toEqual(['description', 'summary', 'video-content']);
+		});
+
+		test('creates the Description chapter for the summary even without a description', async () => {
+			const result = await clip(watchPage(), { youtubeAddSummary: true, youtubeFetchTranscription: false });
+			expect(result.html).toContain('<h2>Description</h2><a id="summary"></a><h3>AI generated Summary</h3>');
+		});
+
+		test('adds no Summary chapter by default', async () => {
+			const result = await clip(watchPage({ description: chapterDescription, transcript: true }));
+			expect(result.html).not.toContain('Summary');
+		});
+
+		test('adds no Related Information chapter by default', async () => {
+			const result = await clip(watchPage({ description: chapterDescription, transcript: true }));
+			expect(result.html).not.toContain('Related Information');
+		});
+
 		test('keeps the video content without a table of contents when there is no transcript and no chapters', async () => {
 			const result = await clip(watchPage({ description: 'Just text' }), { youtubeFetchTranscription: false });
 			expect(result.html).toContain('<h3>Content</h3>');
