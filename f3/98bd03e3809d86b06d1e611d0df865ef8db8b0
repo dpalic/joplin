@@ -1,0 +1,40 @@
+packages/app-clipper/content_scripts/youtubeTranscript.js
+  s_2fefdcba44a1c4::t_e3e09fe248ac5b 12-13
+  s_2fefdcba44a1c4::t_9b48f73097117f 340
+  s_2fefdcba44a1c4::t_ad07ce598c7cde 346-350
+  s_2fefdcba44a1c4::t_57a205df9cff35 11
+  s_2fefdcba44a1c4::t_2d5c161449b516 27-28
+  s_2fefdcba44a1c4::t_3b4a660f159f41 238-240
+  s_2fefdcba44a1c4::t_f25936e376f996 25-26
+  s_2fefdcba44a1c4::t_5c56cf913c098d 134-137
+  s_2fefdcba44a1c4::t_7f5df2a56c8ef6 138-141
+  s_2fefdcba44a1c4::t_8feb0a808ee9eb 367-368
+packages/app-clipper/tests/youtubeTranscript.test.js
+  s_2fefdcba44a1c4::t_4803f6a1ba7702 130-150
+  s_2fefdcba44a1c4::t_d735c33abe8315 121-129,151-155
+packages/app-clipper/options/options.css
+  s_2fefdcba44a1c4::t_b594fc061339d7 37-42
+packages/app-clipper/options/options.html
+  s_2fefdcba44a1c4::t_0e4e807cbb2d2e 26-32
+  s_2fefdcba44a1c4::t_35453f6a2bf028 33-41
+packages/app-clipper/options/options.js
+  s_2fefdcba44a1c4::t_e70d3485e84834 9-10
+  s_2fefdcba44a1c4::t_b7598e31d75cf3 8
+  s_2fefdcba44a1c4::t_5e0e69c3f39e81 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f398bd03e3809d86b06d1e611d0df865ef8db8b0",
+  "prompts": {},
+  "sessions": {
+    "s_2fefdcba44a1c4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "342987b4-428f-476f-a53a-963990295cf7",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Darko Palic <darko.palic@xenovation.com>"
+    }
+  }
+}
